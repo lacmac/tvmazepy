@@ -22,31 +22,31 @@ class TVmaze:
             return None
         return res.json()
 
-    def search_show_name(self, show_name):
+    def search_show(self, show_name):
         print(f'Searching shows with name: {show_name}')
         res = self.query_api(endpoints.search_show_name, {'q': show_name})
         return [Show(show) for show in res] if res is not None else []
 
-    def single_search_show_name(self, show_name, embed=None):
+    def search_show_best_match(self, show_name, embed=None):
         print(f'Searching a show with name: {show_name}')
-        res = self.query_api(endpoints.single_search_show_name, {'q': show_name, 'embed': embed})
+        res = self.query_api(endpoints.search_show_best_match, {'q': show_name, 'embed': embed})
         return Show(res) if res is not None else None
 
-    def search_imdb_id(self, imdb_id):
-        return self._search_external_show_id('imdb', imdb_id)
+    def get_show_imdb(self, imdb_id):
+        return self._get_show_external_id('imdb', imdb_id)
 
-    def search_thetvdb_id(self, tvdb_id):
-        return self._search_external_show_id('thetvdb', tvdb_id)
+    def get_show_thetvdb(self, tvdb_id):
+        return self._get_show_external_id('thetvdb', tvdb_id)
 
-    def search_tvrage_id(self, tvrage_id):
-        return self._search_external_show_id('tvrage', tvrage_id)
+    def get_show_tvrage(self, tvrage_id):
+        return self._get_show_external_id('tvrage', tvrage_id)
 
-    def _search_external_show_id(self, external_name, external_id):
+    def _get_show_external_id(self, external_name, external_id):
         print(f'Searching show with {external_name} ID: {external_id}')
         res = self.query_api(endpoints.search_external_show_id, {external_name: external_id})
         return Show(res) if res is not None else None
 
-    def search_tvmaze_id(self, tvmaze_id, embed=None):
+    def get_show(self, tvmaze_id, embed=None):
         print(f'Searching show with TVmaze ID: {tvmaze_id}')
         res = self.query_api(endpoints.show_information.format(str(tvmaze_id)), {'embed': embed})
         return Show(res) if res is not None else None
