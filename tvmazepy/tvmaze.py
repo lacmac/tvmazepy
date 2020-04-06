@@ -7,6 +7,7 @@ from . import endpoints
 from .model.show import Show, Alias
 from .model.episode import Episode
 from .model.season import Season
+from .model.person import Character, Person, Crew
 
 
 class TVmaze:
@@ -96,3 +97,13 @@ class TVmaze:
         print(f'Episode of TVmaze episode ID: {tvmaze_episode_id}')
         res = self._query_api(endpoints.episode_information.format(str(tvmaze_episode_id)), {'embed': embed})
         return Episode(res) if res is not None else None
+
+    def get_show_cast(self, tvmaze_id):
+        print(f'Cast of show with TVmaze ID: {tvmaze_id}')
+        res = self._query_api(endpoints.show_cast.format(str(tvmaze_id)))
+        return [Character(cast['character'], cast['person']) for cast in res]
+
+    def get_show_crew(self, tvmaze_id):
+        print(f'Cast of show with TVmaze ID: {tvmaze_id}')
+        res = self._query_api(endpoints.show_crew.format(str(tvmaze_id)))
+        return [Crew(crew_member) for crew_member in res]
