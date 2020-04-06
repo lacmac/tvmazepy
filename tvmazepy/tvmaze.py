@@ -42,3 +42,8 @@ class TVmaze:
         print(f'Searching Show With {external_name} ID: {external_id}')
         res = self.query_api(endpoints.search_external_show_id, {external_name: external_id})
         return Show(res) if res is not None else None
+
+    def search_tvmaze_id(self, tvmaze_id, embed=None):
+        print(f'Searching Show With TVmaze ID: {tvmaze_id}')
+        res = self.query_api(endpoints.search_tvmaze_id + str(tvmaze_id), {'embed': embed})
+        return Show(res) if res is not None else None
