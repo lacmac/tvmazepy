@@ -2,6 +2,7 @@ import requests
 import urllib
 import endpoints
 from model.show import Show
+from model.episode import Episode
 
 
 class TVmaze:
@@ -12,18 +13,17 @@ class TVmaze:
         res = requests.get(url, params)
         print(res.url)
         if res.status_code != requests.codes.OK:
-            # print(res.url)
             print(f'Page request was unsuccessful: {res.status_code}', res.reason)
             return None
         return res.json()
 
     def search_show_name(self, show_name):
-        print(f'Searching Shows With Name: {show_name}')
+        print(f'Searching shows with name: {show_name}')
         res = self.query_api(endpoints.search_show_name, {'q': show_name})
         return [Show(show) for show in res] if res is not None else []
 
     def single_search_show_name(self, show_name, embed=None):
-        print(f'Searching A Show With Name: {show_name}')
+        print(f'Searching a show with name: {show_name}')
         res = self.query_api(endpoints.single_search_show_name, {'q': show_name, 'embed': embed})
         return Show(res) if res is not None else None
 
@@ -39,11 +39,17 @@ class TVmaze:
     def search_external_show_id(self, external_name, external_id):
         if not external_id or external_name not in ['imdb', 'thetvdb', 'tvrage']:
             return
-        print(f'Searching Show With {external_name} ID: {external_id}')
+        print(f'Searching show with {external_name} ID: {external_id}')
         res = self.query_api(endpoints.search_external_show_id, {external_name: external_id})
         return Show(res) if res is not None else None
 
     def search_tvmaze_id(self, tvmaze_id, embed=None):
-        print(f'Searching Show With TVmaze ID: {tvmaze_id}')
-        res = self.query_api(endpoints.search_tvmaze_id + str(tvmaze_id), {'embed': embed})
+        print(f'Searching show with TVmaze ID: {tvmaze_id}')
+        res = self.query_api(endpoints.show_information.format(str(tvmaze_id)), {'embed': embed})
         return Show(res) if res is not None else None
+
+    def get_show_episode_list(self, tvmaze_id, specials=False):
+        print(f'Episodes of show with TVmaze ID: {tvmaze_id}')
+        specials = 1 if specials else None
+        res = self.query_api(endpoints.show_episode_list.format(str(tvmaze_id)), {'specials': specials})
+        return [Episode(episode) for episode in res] if res is not None else []
