@@ -28,7 +28,7 @@ class TVmaze:
         return Show(res) if res is not None else None
 
     def search_imdb_id(self, imdb_id):
-        return self.search_external_show_id('IMDB', imdb_id)
+        return self.search_external_show_id('imdb', imdb_id)
 
     def search_thetvdb_id(self, tvdb_id):
         return self.search_external_show_id('thetvdb', tvdb_id)
@@ -36,9 +36,9 @@ class TVmaze:
     def search_tvrage_id(self, tvrage_id):
         return self.search_external_show_id('tvrage', tvrage_id)
 
-    def search_external_show_id(self, external_name, id_):
-        if not id_ or external_name not in ['IMDB', 'thetvdb', 'tvrage']:
+    def search_external_show_id(self, external_name, external_id):
+        if not external_id or external_name not in ['imdb', 'thetvdb', 'tvrage']:
             return
-        print(f'Searching A Show With {external_name} ID: {id_}')
-        res = self.query_api(endpoints.search_external_show_id, {f'{external_name}': id_})
+        print(f'Searching Show With {external_name} ID: {external_id}')
+        res = self.query_api(endpoints.search_external_show_id, {external_name: external_id})
         return Show(res) if res is not None else None
