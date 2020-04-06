@@ -53,3 +53,8 @@ class TVmaze:
         specials = 1 if specials else None
         res = self.query_api(endpoints.show_episode_list.format(str(tvmaze_id)), {'specials': specials})
         return [Episode(episode) for episode in res] if res is not None else []
+
+    def get_show_episode(self, tvmaze_id, season, episode):
+        print(f'Episode S{season}E{episode} of show with TVmaze ID: {tvmaze_id}')
+        res = self.query_api(endpoints.show_episode.format(str(tvmaze_id)), {'season': season, 'number': episode})
+        return Episode(res) if res is not None else None
