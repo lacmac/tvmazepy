@@ -9,6 +9,7 @@ class Season:
         self.number = data['number']
         self.name = data['name']
         self.num_episodes = data['episodeOrder']
+        self.episodes = []
         self.premiere_date = data['premiereDate']
         self.end_date = data['endDate']
         self.network = data['network']

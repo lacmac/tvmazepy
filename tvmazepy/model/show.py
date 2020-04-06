@@ -13,6 +13,7 @@ class Show:
         self.genres = show['genres']
         self.status = show['status']
         self.num_episodes = show['runtime']
+        self.seasons = []
         self.premiere_date = show['premiered']  # datetime?
         self.official_site = show['officialSite']
         self.schedule = show['schedule']
@@ -27,3 +28,18 @@ class Show:
 
     def __str__(self):
         return f'{self.id}: {self.name}'
+
+
+class Alias:
+    def __init__(self, data):
+        self.name = data['name']
+        if data['country'] is not None:
+            self.country = data['country']
+        else:
+            self.country = {}
+            self.country['name'] = 'Original Country'
+            self.country['code'] = 'OG'
+            self.country['timezome'] = 'Original Country Timezone'
+
+    def __str__(self):
+        return f'{self.country["name"]}: {self.name}'

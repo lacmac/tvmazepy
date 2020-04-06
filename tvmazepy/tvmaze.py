@@ -4,7 +4,7 @@ import requests
 from dateutil import parser
 
 from . import endpoints
-from .model.show import Show
+from .model.show import Show, Alias
 from .model.episode import Episode
 from .model.season import Season
 
@@ -14,7 +14,7 @@ class TVmaze:
         self.log = log
         print('TVmaze object created.')
 
-    def query_api(self, url, params=None):
+    def _query_api(self, url, params=None):
         res = requests.get(url, params)
         print(res.url)
         if res.status_code != requests.codes.OK:
@@ -80,3 +80,19 @@ class TVmaze:
         print(f'Seasons of show with TVmaze ID: {tvmaze_id}')
         res = self.query_api(endpoints.show_season_list.format(str(tvmaze_id)))
         return [Season(season) for season in res] if res is not None else []
+
+    def get_season_episode_list(self, tvmaze_season_id):
+        print(f'Episodes of season with TVmaze season ID: {tvmaze_season_id}')
+        res = self._query_api(endpoints.season_episode_list.format(str(tvmaze_season_id)))
+        # episode['number'] is None when it is classed as a special, for now don't include specials
+        return [Episode(episode) for episode in res if episode['number'] is not None] if res is not None else []
+
+    def get_show_aliases(self, tvmaze_id):
+        print(f'Aliases of show with TVmaze season ID: {tvmaze_id}')
+        res = self._query_api(endpoints.show_alias_list.format(str(tvmaze_id)))
+        return [Alias(alias) for alias in res] if res is not None else []
+
+    def get_episode_information(self, tvmaze_episode_id, embed=None):
+        print(f'Episode of TVmaze episode ID: {tvmaze_episode_id}')
+        res = self._query_api(endpoints.episode_information.format(str(tvmaze_episode_id)), {'embed': embed})
+        return Episode(res) if res is not None else None
