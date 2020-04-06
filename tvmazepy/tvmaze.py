@@ -3,10 +3,10 @@ from datetime import datetime
 import requests
 from dateutil import parser
 
-import endpoints
-from model.show import Show
-from model.episode import Episode
-from model.season import Season
+from . import endpoints
+from .model.show import Show
+from .model.episode import Episode
+from .model.season import Season
 
 
 class TVmaze:
