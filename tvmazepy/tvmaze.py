@@ -1,12 +1,17 @@
+from datetime import datetime
+
 import requests
-import urllib
+from dateutil import parser
+
 import endpoints
 from model.show import Show
 from model.episode import Episode
+from model.season import Season
 
 
 class TVmaze:
-    def __init__(self):
+    def __init__(self, log=False):
+        self.log = log
         print('TVmaze object created.')
 
     def query_api(self, url, params=None):
@@ -58,3 +63,22 @@ class TVmaze:
         print(f'Episode S{season}E{episode} of show with TVmaze ID: {tvmaze_id}')
         res = self.query_api(endpoints.show_episode.format(str(tvmaze_id)), {'season': season, 'number': episode})
         return Episode(res) if res is not None else None
+
+    def get_show_episodes_by_date(self, tvmaze_id, date_input):
+        print(f'Episode released on {date_input} of show with TVmaze ID: {tvmaze_id}')
+        if type(date_input) is str:
+            try:
+                date = parser.parse(date_input).isoformat()[:10]
+            except parser._parser.ParserError:
+                return []
+        elif type(date_input) is datetime:
+            date = date_input.isoformat()[:10]
+        else:
+            return []
+        res = self.query_api(endpoints.show_episodes_on_date.format(str(tvmaze_id)), {'date': date})
+        return [Episode(episode) for episode in res] if res is not None else []
+
+    def get_show_season_list(self, tvmaze_id):
+        print(f'Seasons of show with TVmaze ID: {tvmaze_id}')
+        res = self.query_api(endpoints.show_season_list.format(str(tvmaze_id)))
+        return [Season(season) for season in res] if res is not None else []
