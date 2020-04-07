@@ -15,6 +15,7 @@ class Episode:
         self.image = data['image']
         self.summary = utils.strip_tags(data['summary'])
         self.links = data['_links']
+        self.special = self.number is None
 
     def __str__(self):
         return f'S{self.season}E{self.number} {self.name}'

@@ -9,7 +9,8 @@ class TestTVmaze(unittest.TestCase):
         self.maze = tvmaze.TVmaze()
 
     def test_get_show(self):
-        show = self.maze.get_show(82, populated=True)
+        show_id = self.maze.search_show_best_match("Breaking Bad").id
+        show = self.maze.get_show(show_id, populated=True)
         print(show)
         for season in show.seasons:
             print(season)

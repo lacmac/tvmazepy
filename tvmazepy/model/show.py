@@ -16,11 +16,10 @@ class Show:
         self.genres = show['genres']
         self.status = show['status']
         self.num_episodes = show['runtime']
-        self.seasons = [Season(None, placeholder=True)]
+        self.seasons = []
         self.cast = []
         self.crew = []
-        self.embedded = show['_embedded'] if '_embedded' in data else None
-        self._handle_embedded()
+        self._handle_embedded(data['_embedded']) if '_embedded' in data else None
         self.premiere_date = show['premiered']  # datetime?
         self.official_site = show['officialSite']
         self.schedule = show['schedule']
@@ -33,16 +32,15 @@ class Show:
         self.summary = utils.strip_tags(show['summary'])
         self.links = show['_links']
 
-    def _handle_embedded(self):
-        if self.embedded is not None:
-            seasons = [Season(season) for season in self.embedded['seasons']] if 'seasons' in self.embedded else []
-            episodes = [Episode(episode) for episode in self.embedded['episodes']] if 'episodes' in self.embedded else []
-            for season in seasons:
-                self.seasons.append(season)
+    def _handle_embedded(self, embedded):
+        self.seasons = [Season(season) for season in embedded['seasons']] if 'seasons' in embedded else []
+        episodes = [Episode(episode) for episode in embedded['episodes']] if 'episodes' in embedded else []
+        if len(self.seasons) != 0:
             for episode in episodes:
-                self.seasons[episode.season].episodes.append(episode)
-            self.cast = [Character(c['character'], c['person']) for c in self.embedded['cast']] if 'cast' in self.embedded else []
-            self.crew = [Crew(c) for c in self.embedded['crew']] if 'crew' in self.embedded else []
+                if episode.season <= len(self.seasons):
+                    self.seasons[episode.season - 1].episodes.append(episode)
+        self.cast = [Character(c['character'], c['person']) for c in embedded['cast']] if 'cast' in embedded else []
+        self.crew = [Crew(c) for c in embedded['crew']] if 'crew' in embedded else []
 
     def __str__(self):
         return f'{self.id}: {self.name}'
