@@ -47,8 +47,11 @@ class TVmaze:
         return Show(res) if res is not None else None
 
     def get_show(self, tvmaze_id, populated=False, embed=None):
-        embed = Embed(embed) if not populated else Embed(['seasons', 'episodes', 'cast', 'crew'])
+        embed = Embed(embed) if not populated else Embed(['seasons', 'cast', 'crew'])
         res = self._query_api(endpoints.show_information.format(str(tvmaze_id)), {embed.key: embed.value})
+        if populated:
+            episodes = [episode for episode in self.get_show_episode_list(tvmaze_id, specials=True)]
+            res['_embedded']['episodes'] = episodes
         return Show(res) if res is not None else None
 
     def get_show_episode_list(self, tvmaze_id, specials=False):
