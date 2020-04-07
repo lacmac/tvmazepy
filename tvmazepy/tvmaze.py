@@ -23,11 +23,11 @@ class TVmaze:
         return res.json()
 
     def search_show(self, show_name):
-        res = self.query_api(endpoints.search_show_name, {'q': show_name})
+        res = self._query_api(endpoints.search_show_name, {'q': show_name})
         return [Show(show) for show in res] if res is not None else []
 
     def search_show_best_match(self, show_name, embed=None):
-        res = self.query_api(endpoints.search_show_best_match, {'q': show_name, 'embed': embed})
+        res = self._query_api(endpoints.search_show_best_match, {'q': show_name, 'embed': embed})
         return Show(res) if res is not None else None
 
     def get_show_external(self, imdb_id=None, tvdb_id=None, tvrage_id=None):
@@ -41,20 +41,20 @@ class TVmaze:
             return self._get_show_external_id('tvrage', tvrage_id)
 
     def _get_show_external_id(self, external_name, external_id):
-        res = self.query_api(endpoints.search_external_show_id, {external_name: external_id})
+        res = self._query_api(endpoints.search_external_show_id, {external_name: external_id})
         return Show(res) if res is not None else None
 
     def get_show(self, tvmaze_id, embed=None):
-        res = self.query_api(endpoints.show_information.format(str(tvmaze_id)), {'embed': embed})
+        res = self._query_api(endpoints.show_information.format(str(tvmaze_id)), {'embed': embed})
         return Show(res) if res is not None else None
 
     def get_show_episode_list(self, tvmaze_id, specials=False):
         specials = 1 if specials else None
-        res = self.query_api(endpoints.show_episode_list.format(str(tvmaze_id)), {'specials': specials})
+        res = self._query_api(endpoints.show_episode_list.format(str(tvmaze_id)), {'specials': specials})
         return [Episode(episode) for episode in res] if res is not None else []
 
     def get_show_episode(self, tvmaze_id, season, episode):
-        res = self.query_api(endpoints.show_episode.format(str(tvmaze_id)), {'season': season, 'number': episode})
+        res = self._query_api(endpoints.show_episode.format(str(tvmaze_id)), {'season': season, 'number': episode})
         return Episode(res) if res is not None else None
 
     def get_show_episodes_by_date(self, tvmaze_id, date_input):
@@ -67,11 +67,11 @@ class TVmaze:
             date = date_input.isoformat()[:10]
         else:
             return []
-        res = self.query_api(endpoints.show_episodes_on_date.format(str(tvmaze_id)), {'date': date})
+        res = self._query_api(endpoints.show_episodes_on_date.format(str(tvmaze_id)), {'date': date})
         return [Episode(episode) for episode in res] if res is not None else []
 
     def get_show_season_list(self, tvmaze_id):
-        res = self.query_api(endpoints.show_season_list.format(str(tvmaze_id)))
+        res = self._query_api(endpoints.show_season_list.format(str(tvmaze_id)))
         return [Season(season) for season in res] if res is not None else []
 
     def get_season_episode_list(self, tvmaze_season_id):
