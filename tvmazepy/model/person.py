@@ -26,7 +26,7 @@ class Character:
         self.person = Person(person)
 
     def __str__(self):
-        return f'{self.name} played by {str(self.person)}'
+        return f'{self.name}: {str(self.person)}'
 
 
 class Crew(Person):
