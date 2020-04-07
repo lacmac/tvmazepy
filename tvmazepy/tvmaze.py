@@ -30,14 +30,15 @@ class TVmaze:
         res = self.query_api(endpoints.search_show_best_match, {'q': show_name, 'embed': embed})
         return Show(res) if res is not None else None
 
-    def get_show_imdb(self, imdb_id):
-        return self._get_show_external_id('imdb', imdb_id)
-
-    def get_show_thetvdb(self, tvdb_id):
-        return self._get_show_external_id('thetvdb', tvdb_id)
-
-    def get_show_tvrage(self, tvrage_id):
-        return self._get_show_external_id('tvrage', tvrage_id)
+    def get_show_external(self, imdb_id=None, tvdb_id=None, tvrage_id=None):
+        if len(list(filter(None, [imdb_id, tvdb_id, tvrage_id]))) == 0:
+            return None
+        if imdb_id is not None:
+            return self._get_show_external_id('imdb', imdb_id)
+        if tvdb_id is not None:
+            return self._get_show_external_id('thetvdb', tvdb_id)
+        if tvrage_id is not None:
+            return self._get_show_external_id('tvrage', tvrage_id)
 
     def _get_show_external_id(self, external_name, external_id):
         res = self.query_api(endpoints.search_external_show_id, {external_name: external_id})
