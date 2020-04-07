@@ -17,6 +17,7 @@ class Show:
         self.status = show['status']
         self.num_episodes = show['runtime']
         self.seasons = {}
+        self._episode_list = []
         self.specials = {}
         self.cast = []
         self.crew = []
@@ -39,12 +40,22 @@ class Show:
             for season in seasons:
                 self.seasons[season.number] = season
 
-            if 'episodes' in embedded:
-                for episode in embedded['episodes']:
-                    if not episode.special:
-                        self.seasons[episode.season].episodes[episode.number] = episode
-                    else:
-                        self.specials[episode.id] = episode
+        if 'seasons' in embedded and 'episodes' in embedded:
+            episodes = [Episode(episode) for episode in embedded['episodes']]
+            for episode in episodes:
+                if not episode.special:
+                    self.seasons[episode.season].episodes[episode.number] = episode
+                else:
+                    self.specials[episode.id] = episode
+
+        if 'seasons' not in embedded and 'episodes' in embedded:
+            episodes = [Episode(episode) for episode in embedded['episodes']]
+            for episode in episodes:
+                if not episode.special:
+                    self._episode_list.append(episode)
+                else:
+                    self.specials[episode.id] = episode
+
         self.cast = [Character(c['character'], c['person']) for c in embedded['cast']] if 'cast' in embedded else []
         self.crew = [Crew(c) for c in embedded['crew']] if 'crew' in embedded else []
 
