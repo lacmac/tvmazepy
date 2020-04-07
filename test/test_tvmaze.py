@@ -4,11 +4,9 @@ from tvmazepy import tvmaze
 
 
 class TestTVmaze(unittest.TestCase):
-    def setUp(self):
-        self.maze = tvmaze.TVmaze()
-
-    def tearDown(self):
-        pass
+    @classmethod
+    def setUpClass(cls):
+        cls.maze = tvmaze.TVmaze()
 
     def test_get_show(self):
         show_id = self.maze.search_show_best_match("Breaking Bad").id
