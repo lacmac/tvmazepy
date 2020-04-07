@@ -60,14 +60,14 @@ class TVmaze:
     def get_show_episodes_by_date(self, tvmaze_id, date_input):
         if type(date_input) is str:
             try:
-                date = parser.parse(date_input).isoformat()[:10]
+                date = parser.parse(date_input)
             except parser._parser.ParserError:
                 return []
         elif type(date_input) is datetime:
-            date = date_input.isoformat()[:10]
+            date = date_input
         else:
             return []
-        res = self._query_api(endpoints.show_episodes_on_date.format(str(tvmaze_id)), {'date': date})
+        res = self._query_api(endpoints.show_episodes_on_date.format(str(tvmaze_id)), {'date': date.isoformat()[:10]})
         return [Episode(episode) for episode in res] if res is not None else []
 
     def get_show_season_list(self, tvmaze_id):
