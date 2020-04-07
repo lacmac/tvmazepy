@@ -8,6 +8,7 @@ from .model.show import Show, Alias
 from .model.episode import Episode
 from .model.season import Season
 from .model.person import Character, Person, Crew
+from .model.embed import Embed
 
 
 class TVmaze:
@@ -27,7 +28,8 @@ class TVmaze:
         return [Show(show) for show in res] if res is not None else []
 
     def search_show_best_match(self, show_name, embed=None):
-        res = self._query_api(endpoints.search_show_best_match, {'q': show_name, 'embed': embed})
+        embed = Embed(embed)
+        res = self._query_api(endpoints.search_show_best_match, {'q': show_name, embed.key: embed.value})
         return Show(res) if res is not None else None
 
     def get_show_external(self, imdb_id=None, tvdb_id=None, tvrage_id=None):
@@ -44,8 +46,9 @@ class TVmaze:
         res = self._query_api(endpoints.search_external_show_id, {external_name: external_id})
         return Show(res) if res is not None else None
 
-    def get_show(self, tvmaze_id, embed=None):
-        res = self._query_api(endpoints.show_information.format(str(tvmaze_id)), {'embed': embed})
+    def get_show(self, tvmaze_id, populated=False, embed=None):
+        embed = Embed(embed) if not populated else Embed(['seasons', 'episodes', 'cast', 'crew'])
+        res = self._query_api(endpoints.show_information.format(str(tvmaze_id)), {embed.key: embed.value})
         return Show(res) if res is not None else None
 
     def get_show_episode_list(self, tvmaze_id, specials=False):
@@ -84,7 +87,8 @@ class TVmaze:
         return [Alias(alias) for alias in res] if res is not None else []
 
     def get_episode_information(self, tvmaze_episode_id, embed=None):
-        res = self._query_api(endpoints.episode_information.format(str(tvmaze_episode_id)), {'embed': embed})
+        embed = Embed(embed)
+        res = self._query_api(endpoints.episode_information.format(str(tvmaze_episode_id)), {embed.key: embed.value})
         return Episode(res) if res is not None else None
 
     def get_show_cast(self, tvmaze_id):
