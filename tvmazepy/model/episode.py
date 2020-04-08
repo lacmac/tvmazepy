@@ -18,4 +18,5 @@ class Episode:
         self.special = self.number == 0
 
     def __str__(self):
-        return f'S{self.season}E{self.number} {self.name}' if not self.special else f'Special: {self.name}'
+        return f'S{self.season}E{self.number} {self.name}'
+        # return f'S{self.season}E{self.number} {self.name}' if not self.special else f'Special: {self.name}'

@@ -20,3 +20,8 @@ class TestTVmaze(unittest.TestCase):
         #     print(c)
         # for c in show.crew:
         #     print(c)
+
+    def test_get_show_specials(self):
+        show_id = self.maze.search_show_best_match("Breaking Bad").id
+        specials = self.maze.get_show_specials(show_id)
+        [print(special) for special in specials]

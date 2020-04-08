@@ -35,6 +35,7 @@ class Show:
         self.links = show['_links']
 
     def _handle_embedded(self, embedded):
+        special_num = 1
         if 'seasons' in embedded:
             seasons = [Season(season) for season in embedded['seasons']]
             for season in seasons:
@@ -46,6 +47,9 @@ class Show:
                 if not episode.special:
                     self.seasons[episode.season].episodes[episode.number] = episode
                 else:
+                    episode.season = 0
+                    episode.number = special_num
+                    special_num += 1
                     self.specials[episode.id] = episode
 
         if 'seasons' not in embedded and 'episodes' in embedded:
@@ -54,6 +58,9 @@ class Show:
                 if not episode.special:
                     self._episode_list.append(episode)
                 else:
+                    episode.season = 0
+                    episode.number = special_num
+                    special_num += 1
                     self.specials[episode.id] = episode
 
         self.cast = [Character(c['character'], c['person']) for c in embedded['cast']] if 'cast' in embedded else []
