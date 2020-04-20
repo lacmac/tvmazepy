@@ -1,10 +1,12 @@
+from __future__ import absolute_import, unicode_literals
+
 from .. import utils
 from .season import Season
 from .episode import Episode
 from .person import Crew, Character
 
 
-class Show:
+class Show(object):
     def __init__(self, data):
         self.score = data['score'] if 'score' in data else 100
         show = data['show'] if 'show' in data else data
@@ -67,7 +69,7 @@ class Show:
         self.crew = [Crew(c) for c in embedded['crew']] if 'crew' in embedded else []
 
     def __str__(self):
-        return f'{self.id}: {self.name}'
+        return str(self.id) + ': ' + self.name
 
 
 class Alias:
@@ -82,4 +84,4 @@ class Alias:
             self.country['timezome'] = 'Original Country Timezone'
 
     def __str__(self):
-        return f'{self.country["name"]}: {self.name}'
+        return self.country['name'] + ': ' + self.name

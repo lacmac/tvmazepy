@@ -1,3 +1,4 @@
+from __future__ import absolute_import, print_function
 from datetime import datetime
 
 import requests
@@ -11,15 +12,12 @@ from .model.person import Character, Person, Crew
 from .model.embed import Embed
 
 
-class TVmaze:
-    def __init__(self):
-        pass
-
+class TVmaze(object):
     def _query_api(self, url, params=None):
         res = requests.get(url, params)
         print(res.url)
         if res.status_code != requests.codes.OK:
-            print(f'Page request was unsuccessful: {res.status_code}', res.reason)
+            print('Page request was unsuccessful: ' + res.status_code, res.reason)
             return None
         return res.json()
 
