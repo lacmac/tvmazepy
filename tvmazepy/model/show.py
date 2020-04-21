@@ -25,7 +25,7 @@ class Show(object):
         self.cast = []
         self.crew = []
         self._handle_embedded(data.get('_embedded'))
-        self.premiere_date = datetime.strptime(show.get('premiered'), '%Y-%m-%d')
+        self.premiere_date = datetime.strptime(show.get('premiered'), '%Y-%m-%d') if show.get('premiered') is not None else None
         self.official_site = show.get('officialSite')
         self.schedule = show.get('schedule')
         self.rating = show.get('rating')

@@ -5,6 +5,10 @@ from tvmazepy import tvmaze
 
 
 class TestTVmaze(unittest.TestCase):
+    def test_search_show(self):
+        shows = tvmaze.search_show('The Walking Dead')
+        [print(show) for show in shows]
+
     def test_get_show(self):
         show_id = tvmaze.search_show_best_match('Game of Thrones').id
         show = tvmaze.get_show(show_id, populated=True)

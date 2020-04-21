@@ -15,7 +15,7 @@ class Season(object):
             self.name = data.get('name')
             self.num_episodes = data.get('episodeOrder')
             self.episodes = {}
-            self.premiere_date = datetime.strptime(data.get('premiereDate'), '%Y-%m-%d')
+            self.premiere_date = datetime.strptime(data.get('premiereDate'), '%Y-%m-%d') if data.get('premiereDate') is not None else None
             self.end_date = data.get('endDate')
             self.network = data.get('network')
             self.streaming_service = data.get('webChannel')
