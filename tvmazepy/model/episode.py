@@ -1,4 +1,5 @@
 from __future__ import absolute_import, unicode_literals
+from datetime import datetime
 
 from .. import utils
 
@@ -10,7 +11,7 @@ class Episode(object):
         self.name = data.get('name')
         self.season = data.get('season')
         self.number = data.get('number') if data.get('number') is not None else 0
-        self.airdate = data.get('airdate')
+        self.airdate = datetime.strptime(data.get('airdate'), '%Y-%m-%d')
         self.airtime = data.get('airtime')
         self.timestamp = data.get('airstamp')
         self.duration = data.get('runtime')

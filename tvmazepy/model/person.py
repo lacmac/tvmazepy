@@ -1,5 +1,5 @@
 from __future__ import unicode_literals
-
+from datetime import datetime
 
 class Person(object):
     def __init__(self, data):
@@ -7,10 +7,10 @@ class Person(object):
         self.url = data.get('url')
         self.name = data.get('name')
         self.country = data.get('country')
-        self.birthday = data.get('birthday')
-        self.deathday = data.get('deathday')
+        self.birthday = datetime.strptime(data.get('birthday'), '%Y-%m-%d')
+        self.deathday = datetime.strptime(data.get('deathday'), '%Y-%m-%d')
         self.gender = data.get('gender')
-        self.image = data.get('image')
+        self.images = data.get('image')
         self.links = data.get('_links')
 
     def __str__(self):
@@ -22,7 +22,7 @@ class Character(object):
         self.id = data.get('id')
         self.url = data.get('url')
         self.name = data.get('name')
-        self.image = data.get('image')
+        self.images = data.get('image')
         self.links = data.get('_links')
         # self.self = data.get('self')
         # self.voice = data.get('voice')

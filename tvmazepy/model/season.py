@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 import string
+from datetime import datetime
 
 from .. import utils
 from .episode import Episode
@@ -14,7 +15,7 @@ class Season(object):
             self.name = data.get('name')
             self.num_episodes = data.get('episodeOrder')
             self.episodes = {}
-            self.premiere_date = data.get('premiereDate')
+            self.premiere_date = datetime.strptime(data.get('premiereDate'), '%Y-%m-%d')
             self.end_date = data.get('endDate')
             self.network = data.get('network')
             self.streaming_service = data.get('webChannel')
