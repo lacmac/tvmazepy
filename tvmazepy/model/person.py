@@ -7,8 +7,8 @@ class Person(object):
         self.url = data.get('url')
         self.name = data.get('name')
         self.country = data.get('country')
-        self.birthday = datetime.strptime(data.get('birthday'), '%Y-%m-%d')
-        self.deathday = datetime.strptime(data.get('deathday'), '%Y-%m-%d')
+        self.birthday = datetime.strptime(data.get('birthday'), '%Y-%m-%d') if data.get('birthday') is not None else None
+        self.deathday = datetime.strptime(data.get('deathday'), '%Y-%m-%d') if data.get('deathday') is not None else None
         self.gender = data.get('gender')
         self.images = data.get('image')
         self.links = data.get('_links')

@@ -11,7 +11,7 @@ class Episode(object):
         self.name = data.get('name')
         self.season = data.get('season')
         self.number = data.get('number') if data.get('number') is not None else 0
-        self.airdate = datetime.strptime(data.get('airdate'), '%Y-%m-%d')
+        self.airdate = datetime.strptime(data.get('airdate'), '%Y-%m-%d') if data.get('airdate') != '' else None
         self.airtime = data.get('airtime')
         self.timestamp = data.get('airstamp')
         self.duration = data.get('runtime')
